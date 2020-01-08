@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-on:input="changeTitle">
+        <p>{{title}}</p>
+        <p v-once>{{google}} - <a v-bind:href="googleLink">here</a></p>
+        <p>{{sayHello()}} (use sayHello method)</p>
+        <p>This 'Go to Google' will be changed to -  "{{google}}"</p>
+        <p v-html="finishedLink"></p>
+        <input type="text" v-model="name">
+        <p>My name is: {{name}}</p>
+
+        <hr>
+
+        <button v-on:click="increase(2, $event)">Click me</button>
+        <p>{{counter}}</p>
+        <p v-on:mousemove="updateCoordinates">Coordinates: {{x}} / {{y}} - <span v-on:mousemove.stop="">DEAD SPOT</span></p>
+
+        <hr>
+        <button v-on:click="counter++">Increase</button>
+        <button v-on:click="counter--">Decrease</button>
+        <!-- @ is the same as "v-on:" -->
+        <button @click="secondCounter++">Increase Second</button>
+        <!-- : is the same as "v-bind:" -->
+        <a :href="googleLink"></a>
+        <p>Counter: {{counter}} | {{secondCounter}}</p>
+        <p>Result: {{result()}} | {{output}}</p>
+
+        <hr>
+
+        <div class="demo" 
+            @click="attachRed = !attachRed"
+            :class="{red: attachRed}"></div>
+        <div class="demo"
+            @click="attachGreen = !attachGreen"
+            :class="{green: attachGreen}"></div>
+        <div class="demo"
+            @click="attachBlue = !attachBlue"
+            :class="[color, {blue: attachBlue}]"></div>
+        <input type="text" v-model="color">
+        <div class="demo"
+            @click="attachBlue = !attachBlue"
+            :style="[myStyle, {height: widthLast + 'px'}]"></div>
+        <input type="text" v-model="colorLast">
+        <input type="text" v-model="widthLast">
+    </div>
+    
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                title: 'Hello World',
+                google: 'Go to Google',
+                googleLink: 'https://google.com',
+                finishedLink: '<a href="https://google.com">Google finished link</a>',
+                counter: 0,
+                x: 0,
+                y: 0,
+                name: "Roman",
+                secondCounter: "",
+                attachRed: false,
+                attachGreen: false,
+                attachBlue: false,
+                color: 'green',
+                colorLast: 'gray',
+                widthLast: '100',
+            },
+            computed: {
+                output: function() {
+                    return this.counter > 5 ? "Greated 5" : "Smaller than 5"
+                },
+                myStyle: function() {
+                    return {
+                        backgroundColor: this.colorLast,
+                        width: this.widthLast + 'px'
+                    }
+                }
+            },
+            // watch for asyncronos (if u need smth immediately)
+            watch: {
+                counter: function(value) {
+                    setTimeout(()=> {
+                        this.counter = 0;
+                    },2000);
+                }
+            },
+            methods: {
+                changeTitle: function(e) {
+                    this.title = e.target.value;
+                },
+                sayHello: function() {
+                    this.google = "go to another direction";
+                    return "hello";
+                },
+                increase: function(step, e) {
+                    this.counter += step;
+                },
+                updateCoordinates: function(e) {
+                    console.log(e);
+                    this.x = e.clientX;
+                    this.y = e.clientY;
+                },
+                result: function() {
+                    return this.counter > 5 ? "Greated 5" : "Smaller than 5"
+                },
+            }
+        })
+    </script>
+</body>
+</html>

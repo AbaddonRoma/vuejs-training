@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>Section 5 - Instances</title>
+</head>
+<body>
+    <div id="app">
+        <h1>{{title}}</h1>
+        <button @click="show" ref="myButton">Show Paragraph</button>
+        <p v-if="showParagraph">This is not always visible</p>
+    </div>
+
+    <div id="app2">
+        <h1>{{title}}</h1>
+        <button @click="onChange">Change smth in Vue1</button>
+        <hello></hello>
+        <hello></hello>
+    </div>
+    <div id="app3"></div>
+
+    <div class="hello"></div>
+    <div class="hello"></div>
+
+
+    <script>
+
+        Vue.component('hello', {
+            template: '<h1>Hello</h1>'
+        })
+
+        var vm1 = new Vue({
+            // el: '#app',
+            data: {
+              title: 'The VueJS Instance',
+              showParagraph: false
+            },
+            methods: {
+                show: function() {
+                    this.showParagraph = true;
+                    this.updateTitle('The VueJS Instance (updated)');
+                    this.$refs.myButton.innerText = "Test";
+                },
+                updateTitle: function(title) {
+                    this.title = title;
+                }
+            },
+            computed: {
+                lowercaseTitle: function() {
+                    return this.title.toLowerCase();
+                }
+            }
+        })
+
+        setTimeout(function() {
+            // vm1.title = "Changed by Timer",
+            // vm1.show();
+        }, 3000);
+
+        vm1.$mount('#app');
+
+        var vm2 = new Vue({
+            el: '#app2',
+            data : {
+                title: 'The Second VueJS Instance'
+            },
+            methods: {
+                onChange: function() {
+                    vm1.title = 'Changed!'
+                }
+            }
+        })
+
+        var vm3 = new Vue({
+            template: '<h1>Hello</h1>'
+        });
+
+        // vm3.$mount('#app3');
+
+
+    </script>
+</body>
+</html>
